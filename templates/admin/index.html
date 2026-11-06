@@ -1,0 +1,37 @@
+{% extends "admin/index.html" %}
+{% load unfold %}
+
+{% block content %}
+<div class="flex flex-col gap-6 mb-6">
+    <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        {% for card in cards %}
+            {% component "unfold/components/card.html" with title=card.title %}
+                <div class="font-semibold text-2xl text-important">{{ card.metric }}</div>
+            {% endcomponent %}
+        {% endfor %}
+    </div>
+
+    <div class="grid gap-4 grid-cols-1 lg:grid-cols-2">
+        {% component "unfold/components/card.html" with title="Posts per category" %}
+            {% component "unfold/components/chart/bar.html" with data=posts_per_category_chart %}
+            {% endcomponent %}
+        {% endcomponent %}
+
+        {% component "unfold/components/card.html" with title="Top 5 authors" %}
+            {% component "unfold/components/table.html" with table=top_authors_table %}
+            {% endcomponent %}
+        {% endcomponent %}
+    </div>
+
+    {% component "unfold/components/card.html" with title="Published vs draft" %}
+        <div class="flex flex-col gap-3">
+            {% component "unfold/components/progress.html" with title="Published" description=published_share|stringformat:"s"|add:"%" value=published_share %}
+            {% endcomponent %}
+            {% component "unfold/components/progress.html" with title="Draft" description=draft_share|stringformat:"s"|add:"%" value=draft_share %}
+            {% endcomponent %}
+        </div>
+    {% endcomponent %}
+</div>
+
+{{ block.super }}
+{% endblock %}
